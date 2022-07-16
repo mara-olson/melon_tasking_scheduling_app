@@ -29,3 +29,17 @@ class Appointment(db.Model):
 
     def __repr__(self):
         return f'<Appointment appt_id={self.appt_id} time={self.appt_time}>'
+
+
+
+
+def connect_to_db(app):
+
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///melon_tasting'
+    app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+    app.config['SQLALCHEMY_ECHO'] = True
+
+    db.app = app
+    db.init_app(app)
+
+    print('Connected to database!')

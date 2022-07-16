@@ -1,5 +1,5 @@
 from flask import (Flask, render_template, request, flash, session, redirect)
-from model import connect_to_db, db
+from model import connect_to_db, db, Appointment, User
 from jinja2 import StrictUndefined
 
 app = Flask(__name__)
@@ -7,8 +7,45 @@ app.secret_key = "dev"
 app.jinja_env.undefined = StrictUndefined
 
 
+@app.route("/")
+def homepage():
+    """Melon scheduling homepage."""
+    return render_template("index.html")
+
+@app.route('/<path>')
+def route(path):
+
+    return render_template('index.html')
 
 
+@app.route('/<path>/<code>')
+def nested_route(path, code):
+
+    return render_template('index.html')
+
+
+
+@app.route("/api/login")
+def login():
+    """User login with username only."""
+    username = request.args.get("username")
+
+    user = User.query.filter(User.username == username).first()
+    user_id = user.user_id
+    print(user, user_id)
+
+    return 
+
+
+
+@app.route("/api/appointments")
+def get_all_appts():
+    """Display all user appointments."""
+    username = request.args.get("username")
+
+    user = User.query.filter(User.username == username).first()
+    user_id = user.user_id
+    appts = Appointment.query.filter(Appointment.user_id)
 
 
 if __name__ == "__main__":
