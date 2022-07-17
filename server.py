@@ -1,5 +1,9 @@
-from flask import (Flask, render_template, request, flash, session, redirect)
+from flask import Flask, render_template, json, jsonify, request, flash, session, redirect;
 from model import connect_to_db, db, Appointment, User
+import datetime
+# import requests
+import os
+import random, string
 from jinja2 import StrictUndefined
 
 app = Flask(__name__)
@@ -32,20 +36,25 @@ def login():
 
     user = User.query.filter(User.username == username).first()
     active_user_id = user.user_id
-    print(user, active_user_id, "*"*20)
+    session["user_id"] = active_user_id
 
-    return active_user_id
+    print(session["user_id"], "*"*20)
+
+    return jsonify({"user_id": active_user_id})
 
 
 
-# @app.route("/api/appointments")
-# def get_all_appts():
-#     """Display all user appointments."""
-#     username = request.args.get("username")
+@app.route("/api/appointments")
+def get_all_appts():
+    """Display all user appointments."""
+    # username = request.args.get("username")
 
-#     user = User.query.filter(User.username == username).first()
-#     user_id = user.user_id
-#     appts = Appointment.query.filter(Appointment.user_id)
+    # user = User.query.filter(User.username == username).first()
+    # user_id = user.user_id
+    appts = Appointment.query.filter(Appointment.user_id == session["user_id"]).all()
+    print ("APPTS!!!!!!!!!!!:", appts)
+
+    return jsonify({"appts": appts})
 
 
 if __name__ == "__main__":
