@@ -44,17 +44,25 @@ def login():
 
 
 
-@app.route("/api/appointments")
+@app.route("/appointments")
 def get_all_appts():
     """Display all user appointments."""
-    # username = request.args.get("username")
-
-    # user = User.query.filter(User.username == username).first()
-    # user_id = user.user_id
+    
     appts = Appointment.query.filter(Appointment.user_id == session["user_id"]).all()
-    print ("APPTS!!!!!!!!!!!:", appts)
 
-    return jsonify({"appts": appts})
+    all_appts = []
+    for appt in appts:
+        listed_appt = {
+            "appt_id": appt.appt_id,
+            "user_id": appt.user_id,
+            "appt_time": appt.appt_time
+        }
+        all_appts.append(listed_appt)
+        print("APPT ID:", appt.appt_id)
+    print ("APPTS!!!!!!!!!!!:", all_appts)
+
+
+    return jsonify({"appts": all_appts})
 
 
 if __name__ == "__main__":
