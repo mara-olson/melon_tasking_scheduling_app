@@ -58,7 +58,8 @@ def get_all_appts():
             "appt_time": appt.appt_time
         }
         all_appts.append(listed_appt)
-        print("APPT ID:", appt.appt_id)
+        print(listed_appt)
+
     print ("APPTS!!!!!!!!!!!:", all_appts)
 
 
