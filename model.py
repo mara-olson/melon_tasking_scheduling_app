@@ -15,6 +15,13 @@ class User(db.Model):
     def __repr__(self):
         return f'<User user_id={self.user_id} username={self.username}>'
 
+    @classmethod
+    def create_user(cls, username):
+        user = cls(username=username)
+        db.session.add(user)
+        db.session.commit()
+        return user
+
 
 class Appointment(db.Model):
     """Appointments for melon tasting booked by users."""
@@ -30,12 +37,18 @@ class Appointment(db.Model):
     def __repr__(self):
         return f'<Appointment appt_id={self.appt_id} time={self.appt_time}>'
 
+    @classmethod
+    def create_appt(cls, user_id, appt_time):
+        appt = cls(user_id=user_id, appt_time=appt_time)
+        db.session.add(appt)
+        db.session.commit()
+        return appt
+
 
 
 
 def connect_to_db(app):
-
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///melon_tasting'
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///melontasting'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_ECHO'] = True
 

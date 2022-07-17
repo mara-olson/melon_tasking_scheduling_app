@@ -25,27 +25,27 @@ def nested_route(path, code):
 
 
 
-@app.route("/api/login")
+@app.route("/api/login", methods=["POST"])
 def login():
     """User login with username only."""
-    username = request.args.get("username")
+    username = request.json.get("username")
 
     user = User.query.filter(User.username == username).first()
-    user_id = user.user_id
-    print(user, user_id)
+    active_user_id = user.user_id
+    print(user, active_user_id, "*"*20)
 
-    return 
+    return active_user_id
 
 
 
-@app.route("/api/appointments")
-def get_all_appts():
-    """Display all user appointments."""
-    username = request.args.get("username")
+# @app.route("/api/appointments")
+# def get_all_appts():
+#     """Display all user appointments."""
+#     username = request.args.get("username")
 
-    user = User.query.filter(User.username == username).first()
-    user_id = user.user_id
-    appts = Appointment.query.filter(Appointment.user_id)
+#     user = User.query.filter(User.username == username).first()
+#     user_id = user.user_id
+#     appts = Appointment.query.filter(Appointment.user_id)
 
 
 if __name__ == "__main__":
