@@ -58,12 +58,16 @@ def get_all_appts():
             "appt_time": appt.appt_time
         }
         all_appts.append(listed_appt)
-        print(listed_appt)
-
-    print ("APPTS!!!!!!!!!!!:", all_appts)
-
 
     return jsonify({"appts": all_appts})
+
+
+@app.route("/api/scheduling")
+def schedule_appt():
+    """Save user's scheduled appt to the db."""
+    
+
+
 
 
 if __name__ == "__main__":

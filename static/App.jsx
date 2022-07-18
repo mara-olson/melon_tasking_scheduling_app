@@ -40,30 +40,32 @@ function App() {
       >
         Navbar
       </Navbar>
-      <Route exact path="/">
-        {!isLoggedIn ? (
-          <Login
-            isLoggedIn={isLoggedIn}
-            setIsLoggedIn={setIsLoggedIn}
-            userId={userId}
-            setUserId={setUserId}
-          />
-        ) : (
-          <Homepage
-            isLoggedIn={isLoggedIn}
-            setIsLoggedIn={setIsLoggedIn}
-            userId={userId}
-          />
-        )}
-      </Route>
-
-      <Route exact path="/schedule">
-        <ScheduleAppt />
-      </Route>
-      <div>
-        <Route exact path="/appointments">
-          <Appointments userId={userId} appts={appts} />
+      <div className="app-container">
+        <Route exact path="/">
+          {!isLoggedIn ? (
+            <Login
+              isLoggedIn={isLoggedIn}
+              setIsLoggedIn={setIsLoggedIn}
+              userId={userId}
+              setUserId={setUserId}
+            />
+          ) : (
+            <Homepage
+              isLoggedIn={isLoggedIn}
+              setIsLoggedIn={setIsLoggedIn}
+              userId={userId}
+            />
+          )}
         </Route>
+
+        <Route exact path="/schedule">
+          <ScheduleAppt />
+        </Route>
+        <div>
+          <Route exact path="/appointments">
+            <Appointments userId={userId} appts={appts} />
+          </Route>
+        </div>
       </div>
     </BrowserRouter>
   );
