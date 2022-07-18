@@ -46,8 +46,8 @@ function Navbar(props) {
 
   return (
     <div>
-      <nav className="navbar navbar-expand-lg navbar-light bg-light">
-        <div className="container-fluid">
+      <nav className="navbar navbar-expand-sm navbar-light bg-light">
+        <div className="container-fluid navbar-container">
           <a className="navbar-brand" href="#">
             <span className="honey-font">HoneyDo</span>
           </a>
@@ -67,7 +67,7 @@ function Navbar(props) {
               <ul className="navbar-nav">
                 <li className="nav-item">
                   <ReactRouterDOM.NavLink to="/schedule">
-                    <a className="nav-link active" aria-current="page">
+                    <a className="nav-link" aria-current="page">
                       Schedule a Tasting
                     </a>
                   </ReactRouterDOM.NavLink>
@@ -78,7 +78,7 @@ function Navbar(props) {
                   </ReactRouterDOM.NavLink>
                 </li>
                 <li className="nav-item">
-                  <a className="nav-link" href="" onClick={handleLogout}>
+                  <a className="nav-link logout" href="" onClick={handleLogout}>
                     Logout
                   </a>
                 </li>
@@ -89,6 +89,10 @@ function Navbar(props) {
       </nav>
     </div>
   );
+}
+
+function Homepage(props) {
+  return <div>Welcome!</div>;
 }
 
 function Appointments(props) {

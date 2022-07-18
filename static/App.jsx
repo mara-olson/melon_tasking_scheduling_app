@@ -41,13 +41,22 @@ function App() {
         Navbar
       </Navbar>
       <Route exact path="/">
-        <Login
-          isLoggedIn={isLoggedIn}
-          setIsLoggedIn={setIsLoggedIn}
-          userId={userId}
-          setUserId={setUserId}
-        />
+        {!isLoggedIn ? (
+          <Login
+            isLoggedIn={isLoggedIn}
+            setIsLoggedIn={setIsLoggedIn}
+            userId={userId}
+            setUserId={setUserId}
+          />
+        ) : (
+          <Homepage
+            isLoggedIn={isLoggedIn}
+            setIsLoggedIn={setIsLoggedIn}
+            userId={userId}
+          />
+        )}
       </Route>
+
       <Route exact path="/schedule">
         <ScheduleAppt />
       </Route>
