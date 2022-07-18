@@ -90,27 +90,28 @@ function Navbar(props) {
 }
 
 function Appointments(props) {
-  const [appts, setAppts] = React.useState([]);
-
-  React.useEffect(() => {
-    fetch("/appointments")
-      .then((response) => response.json())
-      .then((data) => {
-        // setAppts(data.appts);
-        for (const appt of data.appts) {
-          // apptsToShow.push(<div>{appt["appt_time"]}</div>);
-          console.log(appt.appt_time);
-        }
-      });
-  }, []);
-
+  console.log(props.appts[0].appt_time);
   const apptsToShow = [];
-  for (const appt in appts) {
-    console.log(appt.appt_time);
-    apptsToShow.push(<li>{appt.appt_time}</li>);
+
+  // React.useEffect(() => {
+  //   fetch("/appointments")
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       setAppts(data.appts);
+  //       for (const appt of data.appts) {
+  //         apptsToShow.push(<li className="appt-item">{appt.appt_time}</li>);
+  //         //   console.log(typeof appt.appt_time);
+  //       }
+  //     });
+  // }, []);
+
+  for (const appt of props.appts) {
+    console.log(appt.appt_time.substring(0, 16));
+    const apptTime = appt.appt_time.substring(0, 16);
+    apptsToShow.push(<li className="appt-item">{apptTime}</li>);
   }
 
-  // console.log(apptsToShow);
+  console.log(apptsToShow);
 
   return (
     <div>
