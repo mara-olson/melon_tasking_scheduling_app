@@ -28,7 +28,9 @@ function Login(props) {
           value={username}
           onChange={(evt) => setUsername(evt.currentTarget.value)}
         ></input>
-        <button type="submit">Log in</button>
+        <button classname="btn btn-primary" type="submit">
+          Log in
+        </button>
       </form>
     </div>
   );
@@ -47,7 +49,7 @@ function Navbar(props) {
       <nav className="navbar navbar-expand-lg navbar-light bg-light">
         <div className="container-fluid">
           <a className="navbar-brand" href="#">
-            Navbar
+            <span className="honey-font">HoneyDo</span>
           </a>
           <button
             className="navbar-toggler"
@@ -93,30 +95,16 @@ function Appointments(props) {
   console.log(props.appts[0].appt_time);
   const apptsToShow = [];
 
-  // React.useEffect(() => {
-  //   fetch("/appointments")
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       setAppts(data.appts);
-  //       for (const appt of data.appts) {
-  //         apptsToShow.push(<li className="appt-item">{appt.appt_time}</li>);
-  //         //   console.log(typeof appt.appt_time);
-  //       }
-  //     });
-  // }, []);
-
   for (const appt of props.appts) {
     console.log(appt.appt_time.substring(0, 16));
     const apptTime = appt.appt_time.substring(0, 16);
     apptsToShow.push(<li className="appt-item">{apptTime}</li>);
   }
 
-  console.log(apptsToShow);
-
   return (
-    <div>
-      <h2>Appts</h2>
-      <ul>{apptsToShow}</ul>
+    <div className="my-tastings-container">
+      <h2 className="my-tastings-header">My Tastings</h2>
+      <ul className="appts-list">{apptsToShow}</ul>
     </div>
   );
 }

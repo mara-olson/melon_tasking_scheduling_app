@@ -1,0 +1,13 @@
+body {
+  font-family: "avenir";
+}
+
+.navbar-brand {
+  font-size: 30px;
+}
+
+.honey-font {
+  font-family: "Cookie";
+  font-size: 40px;
+  font-style: italic;
+}
