@@ -33,6 +33,7 @@ function App() {
   return (
     <BrowserRouter>
       <Navbar
+        // logo="/css/logo.png"
         bg="light"
         expand="lg"
         isLoggedIn={isLoggedIn}

@@ -64,7 +64,9 @@ function Navbar(props) {
       <nav className="navbar navbar-expand-sm navbar-light bg-light">
         <div className="container-fluid navbar-container">
           <a className="navbar-brand" href="/">
+            {/* <img src={props.logo} height="30" alt="logo" /> */}
             <span className="honey-font">HoneyDo</span>
+            <span className="honey-font">Tastings</span>
           </a>
           <button
             className="navbar-toggler"
