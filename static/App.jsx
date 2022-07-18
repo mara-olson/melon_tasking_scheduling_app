@@ -2,6 +2,8 @@
 // import Nav from "react-bootstrap/Nav";
 // import Navbar from "react-bootstrap/Navbar";
 // import NavDropdown from "react-bootstrap/NavDropdown";
+// import DateTimePicker from "@react-native-community/datetimepicker";
+
 const { Route, BrowserRouter } = ReactRouterDOM;
 
 function App() {
@@ -45,6 +47,9 @@ function App() {
           userId={userId}
           setUserId={setUserId}
         />
+      </Route>
+      <Route exact path="/schedule">
+        <ScheduleAppt />
       </Route>
       <div>
         <Route exact path="/appointments">
