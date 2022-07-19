@@ -64,8 +64,56 @@ def get_all_appts():
     return jsonify({"appts": all_appts})
 
 
-@app.route("/api/scheduling", methods=["POST"])
-def schedule_appt():
+
+@app.route("/api/schedule-search", methods=["POST"])
+def search_for_appt():
+    """Save user's scheduled appt to the db."""
+    all_appt_times = ["12:00 AM", "12:30 AM","1:00 AM","1:30 AM","2:00 AM","2:30 AM","3:00 AM","3:30 AM","4:00 AM","4:30 AM","5:00 AM","5:30 AM","6:00 AM","6:30 AM","7:00 AM","7:30 AM","8:00 AM","8:30 AM","9:00 AM","9:30 AM","10:00 AM","10:30 AM","11:00 AM","11:30 AM","12:00 PM","12:30 PM","1:00 PM","1:30 PM","2:00 PM","2:30 PM","3:00 PM","3:30 PM","4:00 PM","4:30 PM","5:00 PM","5:30 PM","6:00 PM","6:30 PM","7:00 PM","7:30 PM","8:00 PM","8:30 PM","9:00 PM","9:30 PM","10:00 PM","10:30 PM","11:00 PM","11:30 PM"]
+
+    desired_appt_date = request.json.get("appt_date")
+    desired_start_time = request.json.get("appt_start_time")
+    desired_end_time = request.json.get("appt_end_time")
+    index_start_time = all_appt_times.index(desired_start_time)
+    index_end_time = all_appt_times.index(desired_end_time)
+    print("DESIRED APPT: ", desired_appt_date, desired_start_time, desired_end_time, index_start_time, index_end_time)
+
+    existing_appts = Appointment.query.filter(Appointment.user_id == session["user_id"]).all()
+    existing_appt_dates = []
+
+    for appt in existing_appts:
+        appt_time_to_add = appt.appt_time.strftime("%Y-%m-%d")
+        # print("APPT DATES!:", "*"*20, appt.appt_time.strftime("%Y-%m-%d"))
+        existing_appt_dates.append(appt_time_to_add)
+
+    if desired_appt_date in existing_appt_dates:
+        error = "Oops! Looks like you already have an appointment scheduled on this day. Please try another date."
+        success= False
+        return jsonify({"success": success, "error": error})
+
+    if not desired_appt_date or not desired_start_time or not desired_end_time:
+        error = "Please enter both a date and a time"
+        success = False
+        return jsonify({"success": success, "error": error})
+
+    else:
+        success = True
+        error = None
+        appt_options = all_appt_times[index_start_time:(index_end_time+1)]
+        print("APPT OPTIONS!!!", appt_options)
+
+
+        # new_appt_string = (desired_appt_date + " " + desired_start_time)[:-2]
+        # converted_appt_datetime = datetime.datetime.strptime(new_appt_string, "%Y-%m-%d %H:%M")
+        # print ("NEW APPT TIME TO ADD: ", converted_appt_datetime)
+        # new_appt = Appointment.create_appt(session["user_id"], converted_appt_datetime)
+        # new_appt_date = new_appt.appt_time
+
+        return jsonify({"success": success, "error": error, "appt_options": appt_options})
+
+
+
+@app.route("/api/schedule", methods=["POST"])
+def schedule_selected_appt():
     """Save user's scheduled appt to the db."""
     desired_appt_date = request.json.get("appt_date")
     desired_appt_time = request.json.get("appt_time")
@@ -82,17 +130,23 @@ def schedule_appt():
     if desired_appt_date in existing_appt_dates:
         error = "Oops! Looks like you already have an appointment scheduled on this day. Please try another date."
         success= False
+        return jsonify({"success": success, "error": error})
+
+    if not desired_appt_date or not desired_appt_time:
+        error = "Please enter both a date and a time"
+        success = False
+        return jsonify({"success": success, "error": error})
 
     else:
         success = True
-        error = None
+        error = "Success, this slot is available! "
         new_appt_string = (desired_appt_date + " " + desired_appt_time)[:-2]
         converted_appt_datetime = datetime.datetime.strptime(new_appt_string, "%Y-%m-%d %H:%M")
         print ("NEW APPT TIME TO ADD: ", converted_appt_datetime)
         new_appt = Appointment.create_appt(session["user_id"], converted_appt_datetime)
         new_appt_date = new_appt.appt_time
 
-    return jsonify({"success": success, "error": error, "new_appt": new_appt_date})
+        return jsonify({"success": success, "error": error, "new_appt": new_appt_date})
 
 
 if __name__ == "__main__":

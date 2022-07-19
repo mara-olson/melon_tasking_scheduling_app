@@ -156,15 +156,49 @@ function Appointments(props) {
 }
 
 function ScheduleAppt(props) {
-  const [chosenDate, setChosenDate] = React.useState(null);
-  const [chosenTime, setChosenTime] = React.useState("12:00 AM");
   const today = new Date().toISOString().slice(0, 10);
-  // const now =
-  // const picker = datepicker(".datepicker");
+
+  const [chosenDate, setChosenDate] = React.useState(today);
+  const [chosenStartTime, setChosenStartTime] = React.useState("12:00 AM");
+  const [chosenEndTime, setChosenEndTime] = React.useState("12:00 AM");
+  const [chosenTime, setChosenTime] = React.useState(null);
+  const [scheduleError, setScheduleError] = React.useState("");
+  const [apptOptions, setApptOptions] = React.useState([]);
+  const [showAppts, setShowAppts] = React.useState(false);
 
   const handleSearchAppts = (evt) => {
     evt.preventDefault();
-    fetch("/api/scheduling", {
+    setScheduleError(null);
+    fetch("/api/schedule-search", {
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify({
+        appt_date: chosenDate,
+        appt_start_time: chosenStartTime,
+        appt_end_time: chosenEndTime,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          console.log("SUCCESS!");
+          setShowAppts(true);
+          setScheduleError(null);
+        } else {
+          console.log(data.error);
+          setShowAppts(false);
+          setScheduleError(data.error);
+        }
+      });
+  };
+
+  const handleScheduleAppt = (evt) => {
+    evt.preventDefault();
+    setScheduleError(null);
+    fetch("/api/schedule", {
       method: "POST",
       credentials: "include",
       body: JSON.stringify({
@@ -178,9 +212,12 @@ function ScheduleAppt(props) {
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          console.log("SUCCESS!");
+          setApptOptions(data.appt_options);
+          setScheduleError(null);
         } else {
           console.log(data.error);
+          // setShowAppts(true);
+          setScheduleError(data.error);
         }
       });
   };
@@ -190,7 +227,7 @@ function ScheduleAppt(props) {
       <div className="scheduling-container">
         <div className="card">
           <div>
-            <label className="col-2" htmlFor="date-selector">
+            <label className="col-3" htmlFor="date-selector">
               Date:
             </label>
             <input
@@ -204,71 +241,281 @@ function ScheduleAppt(props) {
               }}
             />
             <br></br>
-            <label className="col-2" htmlFor="hours">
-              Time:
+            <label className="col-3" htmlFor="hours">
+              Start Time:
             </label>
             <select
               className="col-4"
-              value={chosenTime}
+              value={chosenStartTime}
               required
               onChange={(evt) => {
-                setChosenTime(evt.currentTarget.value);
+                setChosenStartTime(evt.currentTarget.value);
               }}
             >
               <option> </option>
-              <option value="12:00AM">12:00 AM</option>
-              <option value="12:30AM">12:30 AM</option>
-              <option value="1:00AM">1:00 AM</option>
-              <option value="1:30AM">1:30 AM</option>
-              <option value="2:00AM">2:00 AM</option>
-              <option value="2:30AM">2:30 AM</option>
-              <option value="3:00AM">3:00 AM</option>
-              <option value="3:30AM">3:30 AM</option>
-              <option value="4:00AM">4:00 AM</option>
-              <option value="4:30AM">4:30 AM</option>
-              <option value="5:00AM">5:00 AM</option>
-              <option value="5:30AM">5:30 AM</option>
-              <option value="6:00AM">6:00 AM</option>
-              <option value="6:30AM">6:30 AM</option>
-              <option value="7:00AM">7:00 AM</option>
-              <option value="7:30AM">7:30 AM</option>
-              <option value="8:00AM">8:00 AM</option>
-              <option value="8:30AM">8:30 AM</option>
-              <option value="9:00AM">9:00 AM</option>
-              <option value="9:30AM">9:30 AM</option>
-              <option value="10:00AM">10:00 AM</option>
-              <option value="10:30AM">10:30 AM</option>
-              <option value="11:00AM">11:00 AM</option>
-              <option value="11:30AM">11:30 AM</option>
-              <option value="12:00PM">12:00 PM</option>
-              <option value="12:30PM">12:30 PM</option>
-              <option value="1:00PM">1:00 PM</option>
-              <option value="1:30PM">1:30 PM</option>
-              <option value="2:00PM">2:00 PM</option>
-              <option value="2:30PM">2:30 PM</option>
-              <option value="3:00PM">3:00 PM</option>
-              <option value="3:30PM">3:30 PM</option>
-              <option value="4:00PM">4:00 PM</option>
-              <option value="4:30PM">4:30 PM</option>
-              <option value="5:00PM">5:00 PM</option>
-              <option value="5:30PM">5:30 PM</option>
-              <option value="6:00PM">6:00 PM</option>
-              <option value="6:30PM">6:30 PM</option>
-              <option value="7:00PM">7:00 PM</option>
-              <option value="7:30PM">7:30 PM</option>
-              <option value="8:00PM">8:00 PM</option>
-              <option value="8:30PM">8:30 PM</option>
-              <option value="9:00PM">9:00 PM</option>
-              <option value="9:30PM">9:30 PM</option>
-              <option value="10:00PM">10:00 PM</option>
-              <option value="10:30PM">10:30 PM</option>
-              <option value="11:00PM">11:00 PM</option>
-              <option value="11:30PM">11:30 PM</option>
+              <option value="12:00 AM">12:00 AM</option>
+              <option value="12:30 AM">12:30 AM</option>
+              <option value="1:00 AM">1:00 AM</option>
+              <option value="1:30 AM">1:30 AM</option>
+              <option value="2:00 AM">2:00 AM</option>
+              <option value="2:30 AM">2:30 AM</option>
+              <option value="3:00 AM">3:00 AM</option>
+              <option value="3:30 AM">3:30 AM</option>
+              <option value="4:00 AM">4:00 AM</option>
+              <option value="4:30 AM">4:30 AM</option>
+              <option value="5:00 AM">5:00 AM</option>
+              <option value="5:30 AM">5:30 AM</option>
+              <option value="6:00 AM">6:00 AM</option>
+              <option value="6:30 AM">6:30 AM</option>
+              <option value="7:00 AM">7:00 AM</option>
+              <option value="7:30 AM">7:30 AM</option>
+              <option value="8:00 AM">8:00 AM</option>
+              <option value="8:30 AM">8:30 AM</option>
+              <option value="9:00 AM">9:00 AM</option>
+              <option value="9:30 AM">9:30 AM</option>
+              <option value="10:00 AM">10:00 AM</option>
+              <option value="10:30 AM">10:30 AM</option>
+              <option value="11:00 AM">11:00 AM</option>
+              <option value="11:30 AM">11:30 AM</option>
+              <option value="12:00 PM">12:00 PM</option>
+              <option value="12:30 PM">12:30 PM</option>
+              <option value="1:00 PM">1:00 PM</option>
+              <option value="1:30 PM">1:30 PM</option>
+              <option value="2:00 PM">2:00 PM</option>
+              <option value="2:30 PM">2:30 PM</option>
+              <option value="3:00 PM">3:00 PM</option>
+              <option value="3:30 PM">3:30 PM</option>
+              <option value="4:00 PM">4:00 PM</option>
+              <option value="4:30 PM">4:30 PM</option>
+              <option value="5:00 PM">5:00 PM</option>
+              <option value="5:30 PM">5:30 PM</option>
+              <option value="6:00 PM">6:00 PM</option>
+              <option value="6:30 PM">6:30 PM</option>
+              <option value="7:00 PM">7:00 PM</option>
+              <option value="7:30 PM">7:30 PM</option>
+              <option value="8:00 PM">8:00 PM</option>
+              <option value="8:30 PM">8:30 PM</option>
+              <option value="9:00 PM">9:00 PM</option>
+              <option value="9:30 PM">9:30 PM</option>
+              <option value="10:00 PM">10:00 PM</option>
+              <option value="10:30 PM">10:30 PM</option>
+              <option value="11:00 PM">11:00 PM</option>
+              <option value="11:30 PM">11:30 PM</option>
+            </select>
+            <br></br>
+            <label className="col-3" htmlFor="hours">
+              End Time:
+            </label>
+            <select
+              className="col-4"
+              value={chosenEndTime}
+              required
+              onChange={(evt) => {
+                setChosenEndTime(evt.currentTarget.value);
+              }}
+            >
+              <option> </option>
+              <option value="12:00 AM">12:00 AM</option>
+              <option value="12:30 AM">12:30 AM</option>
+              <option value="1:00 AM">1:00 AM</option>
+              <option value="1:30 AM">1:30 AM</option>
+              <option value="2:00 AM">2:00 AM</option>
+              <option value="2:30 AM">2:30 AM</option>
+              <option value="3:00 AM">3:00 AM</option>
+              <option value="3:30 AM">3:30 AM</option>
+              <option value="4:00 AM">4:00 AM</option>
+              <option value="4:30 AM">4:30 AM</option>
+              <option value="5:00 AM">5:00 AM</option>
+              <option value="5:30 AM">5:30 AM</option>
+              <option value="6:00 AM">6:00 AM</option>
+              <option value="6:30 AM">6:30 AM</option>
+              <option value="7:00 AM">7:00 AM</option>
+              <option value="7:30 AM">7:30 AM</option>
+              <option value="8:00 AM">8:00 AM</option>
+              <option value="8:30 AM">8:30 AM</option>
+              <option value="9:00 AM">9:00 AM</option>
+              <option value="9:30 AM">9:30 AM</option>
+              <option value="10:00 AM">10:00 AM</option>
+              <option value="10:30 AM">10:30 AM</option>
+              <option value="11:00 AM">11:00 AM</option>
+              <option value="11:30 AM">11:30 AM</option>
+              <option value="12:00 PM">12:00 PM</option>
+              <option value="12:30 PM">12:30 PM</option>
+              <option value="1:00 PM">1:00 PM</option>
+              <option value="1:30 PM">1:30 PM</option>
+              <option value="2:00 PM">2:00 PM</option>
+              <option value="2:30 PM">2:30 PM</option>
+              <option value="3:00 PM">3:00 PM</option>
+              <option value="3:30 PM">3:30 PM</option>
+              <option value="4:00 PM">4:00 PM</option>
+              <option value="4:30 PM">4:30 PM</option>
+              <option value="5:00 PM">5:00 PM</option>
+              <option value="5:30 PM">5:30 PM</option>
+              <option value="6:00 PM">6:00 PM</option>
+              <option value="6:30 PM">6:30 PM</option>
+              <option value="7:00 PM">7:00 PM</option>
+              <option value="7:30 PM">7:30 PM</option>
+              <option value="8:00 PM">8:00 PM</option>
+              <option value="8:30 PM">8:30 PM</option>
+              <option value="9:00 PM">9:00 PM</option>
+              <option value="9:30 PM">9:30 PM</option>
+              <option value="10:00 PM">10:00 PM</option>
+              <option value="10:30 PM">10:30 PM</option>
+              <option value="11:00 PM">11:00 PM</option>
+              <option value="11:30 PM">11:30 PM</option>
             </select>
           </div>
-          <div className="error-container">
-            {props.error && <p>{props.error}</p>}
+          <div className="message-container">
+            {scheduleError && <p classname="error-message">{scheduleError}</p>}
+            {showAppts && <p>Please select a time from the options below</p>}
+            {(!scheduleError || !showAppts) && <p></p>}
           </div>
+          {/* {showAppts && (
+            <div className="results-container">
+              <div className="row">
+                <div className="col-3">
+                  <button className="appt-btn">12:00 AM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">12:30 AM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">1:00 AM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">1:30 AM</button>
+                </div>
+
+                <div className="col-3">
+                  <button className="appt-btn">2:00 AM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">2:30 AM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">3:00 AM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">3:30 AM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">4:00 AM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">4:30 AM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">5:00 AM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">5:30 AM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">6:00 AM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">6:30 AM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">7:00 AM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">7:30 AM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">8:00 AM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">8:30 AM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">9:00 AM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">9:30 AM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">10:00 AM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">10:30 AM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">11:00 AM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">11:30 AM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">12:00 PM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">12:30 PM</button>
+                </div>
+                <div className="col-3">
+                   <button className="appt-btn">1:00 PM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">1:30 PM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">2:00 PM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">2:30 PM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">3:00 PM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">3:30 PM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">4:00 PM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">4:30 PM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">5:00 PM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">5:30 PM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">6:00 PM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">6:30 PM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">7:00 PM</button>
+                </div>
+                
+                <div className="col-3"><button className="appt-btn">7:30 PM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">8:00 PM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">8:30 PM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">9:00 PM</button>
+                </div>
+                <div className="col-3">
+                  <button className="appt-btn">9:30 PM</button>
+                </div>
+                <button className="appt-btn">10:00 PM</button>
+                </div>
+                <button className="appt-btn">10:30 PM</button>
+                </div>
+                <button className="appt-btn">11:00 PM</button>
+                </div>
+                <button className="appt-btn">11:30 PM</button>
+              </div> */}
+          {/* </div> */}
+          {/* )} */}
           <button className="btn schedule-button" onClick={handleSearchAppts}>
             Search Appointments
           </button>

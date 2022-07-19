@@ -80,7 +80,7 @@ body {
 .btn {
   width: 180px;
   margin: auto;
-  margin-top: 40px;
+  /* margin-top: 40px; */
   border-style: solid;
   border-color: rgb(168, 168, 168);
   border-width: 0.5px;
@@ -90,7 +90,7 @@ body {
 .btn:hover {
   width: 180px;
   margin: auto;
-  margin-top: 40px;
+  /* margin-top: 40px; */
   border-style: solid;
   border-color: rgb(168, 168, 168);
   border-width: 0.5px;
@@ -128,4 +128,10 @@ body {
 .small {
   font-size: 17px;
   font-family: avenir;
+}
+
+p.error-message {
+  color: red;
+  margin-top: 10px;
+  height: 70px;
 }
