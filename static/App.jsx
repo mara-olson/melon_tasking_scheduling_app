@@ -9,7 +9,7 @@ const { Route, BrowserRouter } = ReactRouterDOM;
 function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(false);
   const [userId, setUserId] = React.useState(null);
-
+  const [error, setError] = React.useState(null);
   const [appts, setAppts] = React.useState(null);
 
   React.useEffect(() => {
@@ -55,16 +55,23 @@ function App() {
               isLoggedIn={isLoggedIn}
               setIsLoggedIn={setIsLoggedIn}
               userId={userId}
+              error={error}
+              setError={setError}
             />
           )}
         </Route>
 
         <Route exact path="/schedule">
-          <ScheduleAppt />
+          <ScheduleAppt error={error} setError={setError} />
         </Route>
         <div>
           <Route exact path="/appointments">
-            <Appointments userId={userId} appts={appts} />
+            <Appointments
+              userId={userId}
+              appts={appts}
+              error={error}
+              setError={setError}
+            />
           </Route>
         </div>
       </div>

@@ -66,7 +66,8 @@ function Navbar(props) {
           <a className="navbar-brand" href="/">
             {/* <img src={props.logo} height="30" alt="logo" /> */}
             <span className="honey-font">HoneyDo</span>
-            <span className="honey-font">Tastings</span>
+            <br></br>
+            <span className="honey-font small">Tastings</span>
           </a>
           <button
             className="navbar-toggler"
@@ -113,13 +114,31 @@ function Homepage(props) {
 }
 
 function Appointments(props) {
-  console.log(props.appts[0].appt_time);
+  // console.log(props.appts[0].appt_time);
   const apptsToShow = [];
 
   for (const appt of props.appts) {
-    console.log(appt.appt_time.substring(0, 16));
-    const apptTime = appt.appt_time.substring(0, 16);
-    apptsToShow.push(<li className="appt-item">{apptTime}</li>);
+    const apptDate = appt.appt_time.substring(0, 16);
+    const apptTime = appt.appt_time.substring(16, 22);
+    const apptTimeOfDay = apptTime.substring(0, 3);
+    const apptMinutes = apptTime.substring(4, 6);
+    console.log(apptMinutes);
+    let timeOfDay = "AM";
+    if (apptTimeOfDay > 12) {
+      timeOfDay = "PM";
+      // if (apptTimeOfDay === "18") {
+      //   apptTimeOfDay = "06";
+      // }
+    }
+    // if (apptMinutes !== "30" || apptMinutes !== "00") {
+    //   apptMinutes = "00";
+    // }
+    apptsToShow.push(
+      <li className="appt-item">
+        {apptDate} at {apptTime}
+        {timeOfDay}
+      </li>
+    );
   }
 
   return (
@@ -137,31 +156,65 @@ function Appointments(props) {
 }
 
 function ScheduleAppt(props) {
-  const [chosenDate, setChosenDate] = React.useState(new Date());
+  const [chosenDate, setChosenDate] = React.useState(null);
+  const [chosenTime, setChosenTime] = React.useState("12:00 AM");
   const today = new Date().toISOString().slice(0, 10);
   // const now =
   // const picker = datepicker(".datepicker");
+
+  const handleSearchAppts = (evt) => {
+    evt.preventDefault();
+    fetch("/api/scheduling", {
+      method: "POST",
+      credentials: "include",
+      body: JSON.stringify({
+        appt_date: chosenDate,
+        appt_time: chosenTime,
+      }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          console.log("SUCCESS!");
+        } else {
+          console.log(data.error);
+        }
+      });
+  };
 
   return (
     <div>
       <div className="scheduling-container">
         <div className="card">
           <div>
-            <label className="col-2" for="date-selector">
+            <label className="col-2" htmlFor="date-selector">
               Date:
             </label>
             <input
               className="col-4"
               type="date"
               id="date-selector"
-              value={today}
+              value={chosenDate}
               min={today}
+              onChange={(evt) => {
+                setChosenDate(evt.currentTarget.value);
+              }}
             />
             <br></br>
-            <label className="col-2" for="hours">
+            <label className="col-2" htmlFor="hours">
               Time:
             </label>
-            <select className="col-4" required>
+            <select
+              className="col-4"
+              value={chosenTime}
+              required
+              onChange={(evt) => {
+                setChosenTime(evt.currentTarget.value);
+              }}
+            >
               <option> </option>
               <option value="12:00AM">12:00 AM</option>
               <option value="12:30AM">12:30 AM</option>
@@ -213,7 +266,12 @@ function ScheduleAppt(props) {
               <option value="11:30PM">11:30 PM</option>
             </select>
           </div>
-          <button className="btn schedule-button">Book Appointment</button>
+          <div className="error-container">
+            {props.error && <p>{props.error}</p>}
+          </div>
+          <button className="btn schedule-button" onClick={handleSearchAppts}>
+            Search Appointments
+          </button>
         </div>
       </div>
     </div>
