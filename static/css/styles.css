@@ -135,3 +135,72 @@ p.error-message {
   margin-top: 10px;
   height: 70px;
 }
+
+.appt-btn-row {
+  display: inline-block;
+}
+
+.results-container {
+  margin-bottom: 40px;
+}
+
+.appt-btn {
+  width: 100px;
+  border-radius: 4px;
+  height: 40px;
+  margin: auto;
+  margin-top: 20px;
+  border-style: solid;
+  border-color: rgb(168, 168, 168);
+  border-width: 0.5px;
+  background-color: rgb(210, 210, 210);
+}
+
+.appt-btn:focus {
+  width: 100px;
+  border-radius: 4px;
+  height: 40px;
+  margin: auto;
+  margin-top: 20px;
+  border-style: solid;
+  border-color: rgb(195, 207, 154);
+  border-width: 2.5px;
+  background-color: rgb(168, 168, 168);
+}
+
+.schedule-button:focus {
+  outline: none !important;
+  width: 180px;
+  margin: auto;
+  /* margin-top: 40px; */
+  border-style: solid;
+  border-color: rgb(168, 168, 168);
+  border-width: 0.5px;
+  background-color: rgb(248, 249, 203);
+  border-style: solid;
+  border-width: 0.5px;
+}
+
+.schedule-button:active {
+  outline: none !important;
+  width: 180px;
+  margin: auto;
+  /* margin-top: 40px; */
+  border-style: solid;
+  border-color: rgb(168, 168, 168);
+  border-width: 0.5px;
+  background-color: rgb(248, 249, 203);
+  border-width: 0.5px;
+}
+
+.schedule-button:disabled {
+  outline: none !important;
+  width: 180px;
+  margin: auto;
+  /* margin-top: 40px; */
+  border-style: solid;
+  border-color: rgb(168, 168, 168);
+  border-width: 0.5px;
+  background-color: rgb(248, 249, 203);
+  border-width: 0.5px;
+}

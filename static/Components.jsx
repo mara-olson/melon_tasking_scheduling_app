@@ -165,9 +165,11 @@ function ScheduleAppt(props) {
   const [scheduleError, setScheduleError] = React.useState("");
   const [apptOptions, setApptOptions] = React.useState([]);
   const [showAppts, setShowAppts] = React.useState(false);
+  const [isDisabled, setIsDisabled] = React.useState(false);
 
   const handleSearchAppts = (evt) => {
     evt.preventDefault();
+    setIsDisabled(true);
     setScheduleError(null);
     fetch("/api/schedule-search", {
       method: "POST",
@@ -186,7 +188,9 @@ function ScheduleAppt(props) {
         if (data.success) {
           console.log("SUCCESS!");
           setShowAppts(true);
+          setApptOptions(data.appt_options);
           setScheduleError(null);
+          setIsDisabled(false);
         } else {
           console.log(data.error);
           setShowAppts(false);
@@ -212,7 +216,6 @@ function ScheduleAppt(props) {
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          setApptOptions(data.appt_options);
           setScheduleError(null);
         } else {
           console.log(data.error);
@@ -221,6 +224,29 @@ function ScheduleAppt(props) {
         }
       });
   };
+
+  let selected = false;
+  const handleSelectAppt = (evt) => {
+    selected = true;
+  };
+
+  const apptButtons = [];
+  for (const apptOption of apptOptions) {
+    console.log(apptOption);
+    apptButtons.push(
+      <div className="col-3 appt-btn-row">
+        <button
+          className={"appt-btn" + (selected ? " selected" : "")}
+          value={apptOption}
+          onClick={(evt) => {
+            handleSelectAppt();
+          }}
+        >
+          {apptOption}
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -240,7 +266,7 @@ function ScheduleAppt(props) {
                 setChosenDate(evt.currentTarget.value);
               }}
             />
-            <br></br>
+            <p></p>
             <label className="col-3" htmlFor="hours">
               Start Time:
             </label>
@@ -302,7 +328,7 @@ function ScheduleAppt(props) {
               <option value="11:00 PM">11:00 PM</option>
               <option value="11:30 PM">11:30 PM</option>
             </select>
-            <br></br>
+            <p></p>
             <label className="col-3" htmlFor="hours">
               End Time:
             </label>
@@ -366,159 +392,25 @@ function ScheduleAppt(props) {
             </select>
           </div>
           <div className="message-container">
-            {scheduleError && <p classname="error-message">{scheduleError}</p>}
+            {scheduleError && <p className="error-message">{scheduleError}</p>}
             {showAppts && <p>Please select a time from the options below</p>}
             {(!scheduleError || !showAppts) && <p></p>}
           </div>
-          {/* {showAppts && (
-            <div className="results-container">
-              <div className="row">
-                <div className="col-3">
-                  <button className="appt-btn">12:00 AM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">12:30 AM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">1:00 AM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">1:30 AM</button>
-                </div>
-
-                <div className="col-3">
-                  <button className="appt-btn">2:00 AM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">2:30 AM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">3:00 AM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">3:30 AM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">4:00 AM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">4:30 AM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">5:00 AM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">5:30 AM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">6:00 AM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">6:30 AM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">7:00 AM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">7:30 AM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">8:00 AM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">8:30 AM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">9:00 AM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">9:30 AM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">10:00 AM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">10:30 AM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">11:00 AM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">11:30 AM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">12:00 PM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">12:30 PM</button>
-                </div>
-                <div className="col-3">
-                   <button className="appt-btn">1:00 PM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">1:30 PM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">2:00 PM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">2:30 PM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">3:00 PM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">3:30 PM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">4:00 PM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">4:30 PM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">5:00 PM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">5:30 PM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">6:00 PM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">6:30 PM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">7:00 PM</button>
-                </div>
-                
-                <div className="col-3"><button className="appt-btn">7:30 PM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">8:00 PM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">8:30 PM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">9:00 PM</button>
-                </div>
-                <div className="col-3">
-                  <button className="appt-btn">9:30 PM</button>
-                </div>
-                <button className="appt-btn">10:00 PM</button>
-                </div>
-                <button className="appt-btn">10:30 PM</button>
-                </div>
-                <button className="appt-btn">11:00 PM</button>
-                </div>
-                <button className="appt-btn">11:30 PM</button>
-              </div> */}
-          {/* </div> */}
-          {/* )} */}
-          <button className="btn schedule-button" onClick={handleSearchAppts}>
-            Search Appointments
-          </button>
+          {!showAppts && (
+            <button className="btn schedule-button" onClick={handleSearchAppts}>
+              Search Appointments
+            </button>
+          )}
+          {showAppts && <div className="results-container">{apptButtons}</div>}
+          {showAppts && (
+            <button
+              className="btn schedule-button"
+              onClick={handleScheduleAppt}
+              disabled={isDisabled}
+            >
+              Confirm Appointment
+            </button>
+          )}
         </div>
       </div>
     </div>
