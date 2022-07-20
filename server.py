@@ -123,7 +123,8 @@ def schedule_selected_appt():
     converted_appt_datetime = datetime.datetime.strptime(new_appt_string, "%Y-%m-%d %H:%M")
     print ("NEW APPT TIME TO ADD: ", converted_appt_datetime)
     new_appt = Appointment.create_appt(session["user_id"], converted_appt_datetime)
-    new_appt_date = new_appt.appt_time
+    new_appt_date = new_appt.appt_time.strftime("%b %d, %Y at %I:%M %p")
+    print("*****BOOKED APPT: ", new_appt_date)
 
     return jsonify({"new_appt": new_appt_date})
 

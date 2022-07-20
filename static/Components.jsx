@@ -264,8 +264,8 @@ function ScheduleAppt(props) {
       {successAppt ? (
         <SuccessCard successAppt={successAppt} />
       ) : (
-        <div className="scheduling-container">
-          <div className="card">
+        <div className="card">
+          <div className="success-container">
             <div>
               <label className="col-3" htmlFor="date-selector">
                 Date:
