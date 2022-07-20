@@ -119,34 +119,13 @@ def schedule_selected_appt():
     desired_appt_time = request.json.get("appt_time")
     print("DESIRED APPT: ", desired_appt_date, desired_appt_time)
 
-    existing_appts = Appointment.query.filter(Appointment.user_id == session["user_id"]).all()
-    existing_appt_dates = []
+    new_appt_string = (desired_appt_date + " " + desired_appt_time)[:-3]
+    converted_appt_datetime = datetime.datetime.strptime(new_appt_string, "%Y-%m-%d %H:%M")
+    print ("NEW APPT TIME TO ADD: ", converted_appt_datetime)
+    new_appt = Appointment.create_appt(session["user_id"], converted_appt_datetime)
+    new_appt_date = new_appt.appt_time
 
-    for appt in existing_appts:
-        appt_time_to_add = appt.appt_time.strftime("%Y-%m-%d")
-        # print("APPT DATES!:", "*"*20, appt.appt_time.strftime("%Y-%m-%d"))
-        existing_appt_dates.append(appt_time_to_add)
-
-    if desired_appt_date in existing_appt_dates:
-        error = "Oops! Looks like you already have an appointment scheduled on this day. Please try another date."
-        success= False
-        return jsonify({"success": success, "error": error})
-
-    if not desired_appt_date or not desired_appt_time:
-        error = "Please enter both a date and a time"
-        success = False
-        return jsonify({"success": success, "error": error})
-
-    else:
-        success = True
-        error = "Success, this slot is available! "
-        new_appt_string = (desired_appt_date + " " + desired_appt_time)[:-2]
-        converted_appt_datetime = datetime.datetime.strptime(new_appt_string, "%Y-%m-%d %H:%M")
-        print ("NEW APPT TIME TO ADD: ", converted_appt_datetime)
-        new_appt = Appointment.create_appt(session["user_id"], converted_appt_datetime)
-        new_appt_date = new_appt.appt_time
-
-        return jsonify({"success": success, "error": error, "new_appt": new_appt_date})
+    return jsonify({"new_appt": new_appt_date})
 
 
 if __name__ == "__main__":

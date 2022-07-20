@@ -155,6 +155,17 @@ function Appointments(props) {
   );
 }
 
+function SuccessCard(props) {
+  return (
+    <div>
+      <div className="scheduling-container">
+        <div className="card"></div>
+        Success! Your appt is booked for {props.successAppt}
+      </div>
+    </div>
+  );
+}
+
 function ScheduleAppt(props) {
   const today = new Date().toISOString().slice(0, 10);
 
@@ -165,11 +176,12 @@ function ScheduleAppt(props) {
   const [scheduleError, setScheduleError] = React.useState("");
   const [apptOptions, setApptOptions] = React.useState([]);
   const [showAppts, setShowAppts] = React.useState(false);
-  const [isDisabled, setIsDisabled] = React.useState(false);
+  const [successAppt, setSuccessAppt] = React.useState(null);
+  // const [isDisabled, setIsDisabled] = React.useState(false);
 
   const handleSearchAppts = (evt) => {
     evt.preventDefault();
-    setIsDisabled(true);
+    // setIsDisabled(true);
     setScheduleError(null);
     fetch("/api/schedule-search", {
       method: "POST",
@@ -186,13 +198,13 @@ function ScheduleAppt(props) {
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          console.log("SUCCESS!");
+          // console.log("SUCCESS!");
           setShowAppts(true);
           setApptOptions(data.appt_options);
           setScheduleError(null);
-          setIsDisabled(false);
+          // setIsDisabled(false);
         } else {
-          console.log(data.error);
+          // console.log(data.error);
           setShowAppts(false);
           setScheduleError(data.error);
         }
@@ -215,20 +227,18 @@ function ScheduleAppt(props) {
     })
       .then((response) => response.json())
       .then((data) => {
-        if (data.success) {
-          setScheduleError(null);
-        } else {
-          console.log(data.error);
-          // setShowAppts(true);
-          setScheduleError(data.error);
-        }
+        console.log(data.new_appt);
+        setSuccessAppt(data.new_appt);
+        setScheduleError(null);
+        // setShowAppts(true);
+        // setScheduleError(data.error);
       });
   };
 
-  let selected = false;
-  const handleSelectAppt = (evt) => {
-    selected = true;
-  };
+  // let selected = false;
+  // const handleSelectAppt = (evt) => {
+  //   selected = true;
+  // };
 
   const apptButtons = [];
   for (const apptOption of apptOptions) {
@@ -236,10 +246,11 @@ function ScheduleAppt(props) {
     apptButtons.push(
       <div className="col-3 appt-btn-row">
         <button
-          className={"appt-btn" + (selected ? " selected" : "")}
+          className={"appt-btn"}
           value={apptOption}
           onClick={(evt) => {
-            handleSelectAppt();
+            evt.preventDefault();
+            setChosenTime(apptOption);
           }}
         >
           {apptOption}
@@ -250,169 +261,180 @@ function ScheduleAppt(props) {
 
   return (
     <div>
-      <div className="scheduling-container">
-        <div className="card">
-          <div>
-            <label className="col-3" htmlFor="date-selector">
-              Date:
-            </label>
-            <input
-              className="col-4"
-              type="date"
-              id="date-selector"
-              value={chosenDate}
-              min={today}
-              onChange={(evt) => {
-                setChosenDate(evt.currentTarget.value);
-              }}
-            />
-            <p></p>
-            <label className="col-3" htmlFor="hours">
-              Start Time:
-            </label>
-            <select
-              className="col-4"
-              value={chosenStartTime}
-              required
-              onChange={(evt) => {
-                setChosenStartTime(evt.currentTarget.value);
-              }}
-            >
-              <option> </option>
-              <option value="12:00 AM">12:00 AM</option>
-              <option value="12:30 AM">12:30 AM</option>
-              <option value="1:00 AM">1:00 AM</option>
-              <option value="1:30 AM">1:30 AM</option>
-              <option value="2:00 AM">2:00 AM</option>
-              <option value="2:30 AM">2:30 AM</option>
-              <option value="3:00 AM">3:00 AM</option>
-              <option value="3:30 AM">3:30 AM</option>
-              <option value="4:00 AM">4:00 AM</option>
-              <option value="4:30 AM">4:30 AM</option>
-              <option value="5:00 AM">5:00 AM</option>
-              <option value="5:30 AM">5:30 AM</option>
-              <option value="6:00 AM">6:00 AM</option>
-              <option value="6:30 AM">6:30 AM</option>
-              <option value="7:00 AM">7:00 AM</option>
-              <option value="7:30 AM">7:30 AM</option>
-              <option value="8:00 AM">8:00 AM</option>
-              <option value="8:30 AM">8:30 AM</option>
-              <option value="9:00 AM">9:00 AM</option>
-              <option value="9:30 AM">9:30 AM</option>
-              <option value="10:00 AM">10:00 AM</option>
-              <option value="10:30 AM">10:30 AM</option>
-              <option value="11:00 AM">11:00 AM</option>
-              <option value="11:30 AM">11:30 AM</option>
-              <option value="12:00 PM">12:00 PM</option>
-              <option value="12:30 PM">12:30 PM</option>
-              <option value="1:00 PM">1:00 PM</option>
-              <option value="1:30 PM">1:30 PM</option>
-              <option value="2:00 PM">2:00 PM</option>
-              <option value="2:30 PM">2:30 PM</option>
-              <option value="3:00 PM">3:00 PM</option>
-              <option value="3:30 PM">3:30 PM</option>
-              <option value="4:00 PM">4:00 PM</option>
-              <option value="4:30 PM">4:30 PM</option>
-              <option value="5:00 PM">5:00 PM</option>
-              <option value="5:30 PM">5:30 PM</option>
-              <option value="6:00 PM">6:00 PM</option>
-              <option value="6:30 PM">6:30 PM</option>
-              <option value="7:00 PM">7:00 PM</option>
-              <option value="7:30 PM">7:30 PM</option>
-              <option value="8:00 PM">8:00 PM</option>
-              <option value="8:30 PM">8:30 PM</option>
-              <option value="9:00 PM">9:00 PM</option>
-              <option value="9:30 PM">9:30 PM</option>
-              <option value="10:00 PM">10:00 PM</option>
-              <option value="10:30 PM">10:30 PM</option>
-              <option value="11:00 PM">11:00 PM</option>
-              <option value="11:30 PM">11:30 PM</option>
-            </select>
-            <p></p>
-            <label className="col-3" htmlFor="hours">
-              End Time:
-            </label>
-            <select
-              className="col-4"
-              value={chosenEndTime}
-              required
-              onChange={(evt) => {
-                setChosenEndTime(evt.currentTarget.value);
-              }}
-            >
-              <option> </option>
-              <option value="12:00 AM">12:00 AM</option>
-              <option value="12:30 AM">12:30 AM</option>
-              <option value="1:00 AM">1:00 AM</option>
-              <option value="1:30 AM">1:30 AM</option>
-              <option value="2:00 AM">2:00 AM</option>
-              <option value="2:30 AM">2:30 AM</option>
-              <option value="3:00 AM">3:00 AM</option>
-              <option value="3:30 AM">3:30 AM</option>
-              <option value="4:00 AM">4:00 AM</option>
-              <option value="4:30 AM">4:30 AM</option>
-              <option value="5:00 AM">5:00 AM</option>
-              <option value="5:30 AM">5:30 AM</option>
-              <option value="6:00 AM">6:00 AM</option>
-              <option value="6:30 AM">6:30 AM</option>
-              <option value="7:00 AM">7:00 AM</option>
-              <option value="7:30 AM">7:30 AM</option>
-              <option value="8:00 AM">8:00 AM</option>
-              <option value="8:30 AM">8:30 AM</option>
-              <option value="9:00 AM">9:00 AM</option>
-              <option value="9:30 AM">9:30 AM</option>
-              <option value="10:00 AM">10:00 AM</option>
-              <option value="10:30 AM">10:30 AM</option>
-              <option value="11:00 AM">11:00 AM</option>
-              <option value="11:30 AM">11:30 AM</option>
-              <option value="12:00 PM">12:00 PM</option>
-              <option value="12:30 PM">12:30 PM</option>
-              <option value="1:00 PM">1:00 PM</option>
-              <option value="1:30 PM">1:30 PM</option>
-              <option value="2:00 PM">2:00 PM</option>
-              <option value="2:30 PM">2:30 PM</option>
-              <option value="3:00 PM">3:00 PM</option>
-              <option value="3:30 PM">3:30 PM</option>
-              <option value="4:00 PM">4:00 PM</option>
-              <option value="4:30 PM">4:30 PM</option>
-              <option value="5:00 PM">5:00 PM</option>
-              <option value="5:30 PM">5:30 PM</option>
-              <option value="6:00 PM">6:00 PM</option>
-              <option value="6:30 PM">6:30 PM</option>
-              <option value="7:00 PM">7:00 PM</option>
-              <option value="7:30 PM">7:30 PM</option>
-              <option value="8:00 PM">8:00 PM</option>
-              <option value="8:30 PM">8:30 PM</option>
-              <option value="9:00 PM">9:00 PM</option>
-              <option value="9:30 PM">9:30 PM</option>
-              <option value="10:00 PM">10:00 PM</option>
-              <option value="10:30 PM">10:30 PM</option>
-              <option value="11:00 PM">11:00 PM</option>
-              <option value="11:30 PM">11:30 PM</option>
-            </select>
+      {successAppt ? (
+        <SuccessCard successAppt={successAppt} />
+      ) : (
+        <div className="scheduling-container">
+          <div className="card">
+            <div>
+              <label className="col-3" htmlFor="date-selector">
+                Date:
+              </label>
+              <input
+                className="col-4"
+                type="date"
+                id="date-selector"
+                value={chosenDate}
+                min={today}
+                onChange={(evt) => {
+                  setChosenDate(evt.currentTarget.value);
+                }}
+              />
+              <p></p>
+              <label className="col-3" htmlFor="hours">
+                Start Time:
+              </label>
+              <select
+                className="col-4"
+                value={chosenStartTime}
+                required
+                onChange={(evt) => {
+                  setChosenStartTime(evt.currentTarget.value);
+                }}
+              >
+                <option> </option>
+                <option value="12:00 AM">12:00 AM</option>
+                <option value="12:30 AM">12:30 AM</option>
+                <option value="1:00 AM">1:00 AM</option>
+                <option value="1:30 AM">1:30 AM</option>
+                <option value="2:00 AM">2:00 AM</option>
+                <option value="2:30 AM">2:30 AM</option>
+                <option value="3:00 AM">3:00 AM</option>
+                <option value="3:30 AM">3:30 AM</option>
+                <option value="4:00 AM">4:00 AM</option>
+                <option value="4:30 AM">4:30 AM</option>
+                <option value="5:00 AM">5:00 AM</option>
+                <option value="5:30 AM">5:30 AM</option>
+                <option value="6:00 AM">6:00 AM</option>
+                <option value="6:30 AM">6:30 AM</option>
+                <option value="7:00 AM">7:00 AM</option>
+                <option value="7:30 AM">7:30 AM</option>
+                <option value="8:00 AM">8:00 AM</option>
+                <option value="8:30 AM">8:30 AM</option>
+                <option value="9:00 AM">9:00 AM</option>
+                <option value="9:30 AM">9:30 AM</option>
+                <option value="10:00 AM">10:00 AM</option>
+                <option value="10:30 AM">10:30 AM</option>
+                <option value="11:00 AM">11:00 AM</option>
+                <option value="11:30 AM">11:30 AM</option>
+                <option value="12:00 PM">12:00 PM</option>
+                <option value="12:30 PM">12:30 PM</option>
+                <option value="1:00 PM">1:00 PM</option>
+                <option value="1:30 PM">1:30 PM</option>
+                <option value="2:00 PM">2:00 PM</option>
+                <option value="2:30 PM">2:30 PM</option>
+                <option value="3:00 PM">3:00 PM</option>
+                <option value="3:30 PM">3:30 PM</option>
+                <option value="4:00 PM">4:00 PM</option>
+                <option value="4:30 PM">4:30 PM</option>
+                <option value="5:00 PM">5:00 PM</option>
+                <option value="5:30 PM">5:30 PM</option>
+                <option value="6:00 PM">6:00 PM</option>
+                <option value="6:30 PM">6:30 PM</option>
+                <option value="7:00 PM">7:00 PM</option>
+                <option value="7:30 PM">7:30 PM</option>
+                <option value="8:00 PM">8:00 PM</option>
+                <option value="8:30 PM">8:30 PM</option>
+                <option value="9:00 PM">9:00 PM</option>
+                <option value="9:30 PM">9:30 PM</option>
+                <option value="10:00 PM">10:00 PM</option>
+                <option value="10:30 PM">10:30 PM</option>
+                <option value="11:00 PM">11:00 PM</option>
+                <option value="11:30 PM">11:30 PM</option>
+              </select>
+              <p></p>
+              <label className="col-3" htmlFor="hours">
+                End Time:
+              </label>
+              <select
+                className="col-4"
+                value={chosenEndTime}
+                required
+                onChange={(evt) => {
+                  setChosenEndTime(evt.currentTarget.value);
+                }}
+              >
+                <option> </option>
+                <option value="12:00 AM">12:00 AM</option>
+                <option value="12:30 AM">12:30 AM</option>
+                <option value="1:00 AM">1:00 AM</option>
+                <option value="1:30 AM">1:30 AM</option>
+                <option value="2:00 AM">2:00 AM</option>
+                <option value="2:30 AM">2:30 AM</option>
+                <option value="3:00 AM">3:00 AM</option>
+                <option value="3:30 AM">3:30 AM</option>
+                <option value="4:00 AM">4:00 AM</option>
+                <option value="4:30 AM">4:30 AM</option>
+                <option value="5:00 AM">5:00 AM</option>
+                <option value="5:30 AM">5:30 AM</option>
+                <option value="6:00 AM">6:00 AM</option>
+                <option value="6:30 AM">6:30 AM</option>
+                <option value="7:00 AM">7:00 AM</option>
+                <option value="7:30 AM">7:30 AM</option>
+                <option value="8:00 AM">8:00 AM</option>
+                <option value="8:30 AM">8:30 AM</option>
+                <option value="9:00 AM">9:00 AM</option>
+                <option value="9:30 AM">9:30 AM</option>
+                <option value="10:00 AM">10:00 AM</option>
+                <option value="10:30 AM">10:30 AM</option>
+                <option value="11:00 AM">11:00 AM</option>
+                <option value="11:30 AM">11:30 AM</option>
+                <option value="12:00 PM">12:00 PM</option>
+                <option value="12:30 PM">12:30 PM</option>
+                <option value="1:00 PM">1:00 PM</option>
+                <option value="1:30 PM">1:30 PM</option>
+                <option value="2:00 PM">2:00 PM</option>
+                <option value="2:30 PM">2:30 PM</option>
+                <option value="3:00 PM">3:00 PM</option>
+                <option value="3:30 PM">3:30 PM</option>
+                <option value="4:00 PM">4:00 PM</option>
+                <option value="4:30 PM">4:30 PM</option>
+                <option value="5:00 PM">5:00 PM</option>
+                <option value="5:30 PM">5:30 PM</option>
+                <option value="6:00 PM">6:00 PM</option>
+                <option value="6:30 PM">6:30 PM</option>
+                <option value="7:00 PM">7:00 PM</option>
+                <option value="7:30 PM">7:30 PM</option>
+                <option value="8:00 PM">8:00 PM</option>
+                <option value="8:30 PM">8:30 PM</option>
+                <option value="9:00 PM">9:00 PM</option>
+                <option value="9:30 PM">9:30 PM</option>
+                <option value="10:00 PM">10:00 PM</option>
+                <option value="10:30 PM">10:30 PM</option>
+                <option value="11:00 PM">11:00 PM</option>
+                <option value="11:30 PM">11:30 PM</option>
+              </select>
+            </div>
+            <div className="message-container">
+              {scheduleError && (
+                <p className="error-message">{scheduleError}</p>
+              )}
+              {showAppts && <p>Please select a time from the options below</p>}
+              {(!scheduleError || !showAppts) && <p></p>}
+            </div>
+            {!showAppts && (
+              <button
+                className="btn schedule-button"
+                onClick={handleSearchAppts}
+              >
+                Search Appointments
+              </button>
+            )}
+            {showAppts && (
+              <div className="results-container">{apptButtons}</div>
+            )}
+            {showAppts && (
+              <button
+                className="btn schedule-button"
+                onClick={handleScheduleAppt}
+                // disabled={isDisabled}
+              >
+                Confirm Appointment
+              </button>
+            )}
           </div>
-          <div className="message-container">
-            {scheduleError && <p className="error-message">{scheduleError}</p>}
-            {showAppts && <p>Please select a time from the options below</p>}
-            {(!scheduleError || !showAppts) && <p></p>}
-          </div>
-          {!showAppts && (
-            <button className="btn schedule-button" onClick={handleSearchAppts}>
-              Search Appointments
-            </button>
-          )}
-          {showAppts && <div className="results-container">{apptButtons}</div>}
-          {showAppts && (
-            <button
-              className="btn schedule-button"
-              onClick={handleScheduleAppt}
-              disabled={isDisabled}
-            >
-              Confirm Appointment
-            </button>
-          )}
         </div>
-      </div>
+      )}
     </div>
   );
 }
