@@ -157,10 +157,10 @@ function Appointments(props) {
 
 function SuccessCard(props) {
   return (
-    <div>
-      <div className="scheduling-container">
-        <div className="card"></div>
-        Success! Your appt is booked for {props.successAppt}
+    <div className="scheduling-container">
+      <div className="card">
+        <div className="booked"></div>
+        Success! Your appt is booked for <strong>{props.successAppt}</strong>
       </div>
     </div>
   );
