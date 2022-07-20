@@ -110,7 +110,36 @@ function Navbar(props) {
 }
 
 function Homepage(props) {
-  return <div>Welcome!</div>;
+  const history = ReactRouterDOM.useHistory();
+
+  const navigateToScheduling = (evt) => {
+    evt.preventDefault();
+    history.push("/schedule");
+  };
+  return (
+    <div>
+      <div className="scheduling-container">
+        <div className="card">
+          <h2>Welcome!</h2>
+          <p>
+            Here at HoneyDo Tastings, we value juiciness above all else. It is
+            our mission to send the absolute greatest volume of melon juice
+            running down your chin with every bite.
+          </p>
+          <p>
+            All of our credentialed melonniers have been rigorously trained in
+            identifying nuanced distinctions between over 3,000 melon varietals
+            from around the world. We offer the best pairings and guarantee the
+            highest quality experience or your money back.
+          </p>
+          <br></br>
+          <button className="schedule-text-btn" onClick={navigateToScheduling}>
+            Schedule a tasting today!
+          </button>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function Appointments(props) {
@@ -264,9 +293,11 @@ function ScheduleAppt(props) {
       {successAppt ? (
         <SuccessCard successAppt={successAppt} />
       ) : (
-        <div className="card">
-          <div className="success-container">
+        <div className="scheduling-container">
+          <div className="card">
             <div>
+              <h3>Select a date & time for your tasting</h3>
+              <br></br>
               <label className="col-3" htmlFor="date-selector">
                 Date:
               </label>
@@ -409,16 +440,23 @@ function ScheduleAppt(props) {
               {scheduleError && (
                 <p className="error-message">{scheduleError}</p>
               )}
-              {showAppts && <p>Please select a time from the options below</p>}
+              {showAppts && (
+                <p className="pick-a-time-message">
+                  Please select a time from the options below
+                </p>
+              )}
               {(!scheduleError || !showAppts) && <p></p>}
             </div>
             {!showAppts && (
-              <button
-                className="btn schedule-button"
-                onClick={handleSearchAppts}
-              >
-                Search Appointments
-              </button>
+              <div>
+                <br></br>
+                <button
+                  className="btn schedule-button"
+                  onClick={handleSearchAppts}
+                >
+                  Search Appointments
+                </button>
+              </div>
             )}
             {showAppts && (
               <div className="results-container">{apptButtons}</div>
