@@ -35,12 +35,12 @@ def login():
     user = User.query.filter(User.username == username).first()
 
     if not user:
-        print("NEW USER!")
+        # print("NEW USER!")
         user = User.create_user(username)
 
     active_user_id = user.user_id
     session["user_id"] = active_user_id
-    print(session["user_id"], "*"*20)
+    # print(session["user_id"], "*"*20)
 
     return jsonify({"user_id": active_user_id})
 
@@ -61,6 +61,8 @@ def get_all_appts():
         }
         all_appts.append(listed_appt)
 
+    final_appt_list = all_appts.sort(key=lambda x: x["appt_time"], reverse=True)
+
     return jsonify({"appts": all_appts})
 
 
@@ -75,7 +77,7 @@ def search_for_appt():
     desired_end_time = request.json.get("appt_end_time")
     index_start_time = all_appt_times.index(desired_start_time)
     index_end_time = all_appt_times.index(desired_end_time)
-    print("DESIRED APPT: ", desired_appt_date, desired_start_time, desired_end_time, index_start_time, index_end_time)
+    # print("DESIRED APPT: ", desired_appt_date, desired_start_time, desired_end_time, index_start_time, index_end_time)
 
     existing_appts = Appointment.query.filter(Appointment.user_id == session["user_id"]).all()
     existing_appt_dates = []
@@ -99,14 +101,7 @@ def search_for_appt():
         success = True
         error = None
         appt_options = all_appt_times[index_start_time:(index_end_time+1)]
-        print("APPT OPTIONS!!!", appt_options)
-
-
-        # new_appt_string = (desired_appt_date + " " + desired_start_time)[:-2]
-        # converted_appt_datetime = datetime.datetime.strptime(new_appt_string, "%Y-%m-%d %H:%M")
-        # print ("NEW APPT TIME TO ADD: ", converted_appt_datetime)
-        # new_appt = Appointment.create_appt(session["user_id"], converted_appt_datetime)
-        # new_appt_date = new_appt.appt_time
+        # print("APPT OPTIONS!!!", appt_options)
 
         return jsonify({"success": success, "error": error, "appt_options": appt_options})
 
