@@ -259,8 +259,6 @@ function ScheduleAppt(props) {
         console.log(data.new_appt);
         setSuccessAppt(data.new_appt);
         setScheduleError(null);
-        // setShowAppts(true);
-        // setScheduleError(data.error);
       });
   };
 
