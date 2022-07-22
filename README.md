@@ -28,16 +28,8 @@ To solidify and improve upon recent learnings in optimizing component-based arch
 <br>
 In addition to React, a fair portion of HoneyDo’s frontend is built from HTML stylized with CSS. For instance, to reduce the complexity of installation and setup (and work around roadblocks in doing so), a simple input HTML element with
 
-```
-type=”date”
-```
-
-was used to create the datepicker, and time range selections stem from options of select elements.
+````type=”date”~~~ was used to create the datepicker, and time range selections stem from options of select elements.
 <br>
 To hone stylizing skills, CSS was utilized rather than more ready-made options such as Bootstrap. Future versions of HoneyDo will include: disabled “search” or “confirm” appointment buttons if required fields are not complete (date, start time, end time); a more nuanced datepicker that can close upon re-clicking; and persisting the
-
-```
-isLoggedIn
-```
-
-state upon page refresh or clicking the HoneyDo logo navlink.
+```isLoggedIn``` state upon page refresh or clicking the HoneyDo logo navlink.
+````
