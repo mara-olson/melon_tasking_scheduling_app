@@ -1,13 +1,14 @@
-# HoneyDo Tasting
+# HoneyDo Tastings
 
 ## Why?
 
-HoneyDo Tasting is the product of a creative Hackbright Academy assignment -- or, more accurately, a fantastic opportunity to hone coding skills!
-<br><br>
+HoneyDo Tastings is the product of a creative Hackbright Academy assignment -- or, more accurately, a fantastic opportunity to hone coding skills!
+<br>
 
 ## What?
 
 To support the fictitious need for users to schedule boutique melon-tasting experiences, HoneyDo uses a combination of technologies to allow users to register/log in, search for appointments on a given date within a specified range of times, book the appointment, and view a summary of all appointments the user has scheduled.
+<br>
 ![HoneyDo Scheduling](/static/Images/HoneyDo-Scheduling.png)
 <br>
 
