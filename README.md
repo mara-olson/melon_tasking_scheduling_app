@@ -9,6 +9,7 @@ HoneyDo Tastings is the product of a creative Hackbright Academy assignment -- o
 
 To support the fictitious need for users to schedule boutique melon-tasting experiences, HoneyDo uses a combination of technologies to allow users to register/log in, search for appointments on a given date within a specified range of times, book the appointment, and view a summary of all appointments the user has scheduled.
 <br>
+<br>
 ![HoneyDo Scheduling](/static/Images/HoneyDo-Scheduling.png)
 <br>
 
@@ -28,5 +29,6 @@ To solidify and improve upon recent learnings in optimizing component-based arch
 <br>
 <br>
 In addition to React, a fair portion of HoneyDo’s frontend is built from HTML stylized with CSS. For instance, to reduce the complexity of installation and setup (and work around roadblocks in doing so), a simple input HTML element with type=”date” was used to create the datepicker, and time range selections stem from options of select elements.
+<br>
 <br>
 To hone stylizing skills, CSS was utilized rather than more ready-made options such as Bootstrap. Future versions of HoneyDo will include: disabled “search” or “confirm” appointment buttons if required fields are not complete (date, start time, end time); a more nuanced datepicker that can close upon re-clicking; and persisting the isLoggedIn state upon page refresh or clicking the HoneyDo logo navlink.
