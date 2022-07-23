@@ -32,3 +32,6 @@ In addition to React, a fair portion of HoneyDo’s frontend is built from HTML 
 <br>
 <br>
 To hone stylizing skills, CSS was utilized rather than more ready-made options such as Bootstrap. Future versions of HoneyDo will include: disabled “search” or “confirm” appointment buttons if required fields are not complete (date, start time, end time); a more nuanced datepicker that can close upon re-clicking; and persisting the isLoggedIn state upon page refresh or clicking the HoneyDo logo navlink.
+<br>
+<br>
+Deployed at: [https://take-home-scheduling-app.herokuapp.com/](https://take-home-scheduling-app.herokuapp.com/)
