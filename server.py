@@ -1,5 +1,4 @@
-import re
-from flask import Flask, render_template, json, jsonify, request, flash, session, redirect;
+from flask import Flask, render_template, jsonify, request, flash, session;
 from model import connect_to_db, db, Appointment, User
 import datetime
 # import requests

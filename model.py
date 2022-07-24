@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+import os
 
 db = SQLAlchemy()
 
@@ -48,9 +49,11 @@ class Appointment(db.Model):
 
 
 def connect_to_db(app):
+    db_uri = os.environ["DATABASE_URL"].replace("postgres", "postgresql")
     app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql:///melontasting'
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_ECHO'] = True
+
 
     db.app = app
     db.init_app(app)
