@@ -35,3 +35,4 @@ To hone stylizing skills, CSS was utilized rather than more ready-made options s
 <br>
 <br>
 Deployed at: [https://take-home-scheduling-app.herokuapp.com/](https://take-home-scheduling-app.herokuapp.com/)
+NOTE: This link will display the homepage, but is not functional beyond that
