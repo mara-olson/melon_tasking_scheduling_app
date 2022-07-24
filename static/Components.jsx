@@ -35,7 +35,7 @@ function Login(props) {
                 onChange={(evt) => setUsername(evt.currentTarget.value)}
               ></input>
               <br></br>
-              <button classname="btn" id="login-btn" onClick={handleLogin}>
+              <button className="btn" id="login-btn" onClick={handleLogin}>
                 Log in
               </button>
             </form>

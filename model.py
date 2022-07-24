@@ -49,9 +49,9 @@ class Appointment(db.Model):
 
 
 def connect_to_db(app):
-    db_uri = os.environ["DATABASE_URL"].replace("postgres", "postgresql")
+    # db_uri = os.environ["DATABASE_URL"].replace("postgres", "postgresql")
 
-    app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
+    app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://qtvetcfuvurzse:b7c091c0c389a455808535efc493993d22bd7227f5bafa513230d9e005612bdc@ec2-34-239-241-121.compute-1.amazonaws.com:5432/d6m2b8gjgr896b"
     
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SQLALCHEMY_ECHO'] = True
