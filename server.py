@@ -7,7 +7,8 @@ import random, string
 from jinja2 import StrictUndefined
 
 app = Flask(__name__)
-app.secret_key = "dev"
+app.secret_key = os.environ["APP_SECRET_KEY"]
+# app.secret_key = "dev"
 app.jinja_env.undefined = StrictUndefined
 
 
